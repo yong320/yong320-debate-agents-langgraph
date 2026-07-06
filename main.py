@@ -31,11 +31,18 @@ async def main():
     setup_logging()
     validate_env()
     logger = logging.getLogger("main")
+
+    # 人类主持人输入议题（取代 GenerateTopicNode）
+    topic = input("Enter the debate topic: ").strip()
+    while not topic:
+        topic = input("Topic cannot be empty, please try again: ").strip()
+
     try:
         logger.info("[bold green]Starting debate workflow...[/]")
+        logger.info("[bold]议题:[/] %s", topic)
         workflow = DebateWorkflow()
-        workflow_result = await workflow.run()
-        
+        workflow_result = await workflow.run(topic)
+
         final_message = workflow_result["messages"][-1]["content"]
         logger.info("\n[bold]━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[/]")
         if "WINNER: PRO" in final_message:
@@ -48,7 +55,7 @@ async def main():
             logger.info("[yellow]  %s[/]", final_message)
         logger.info("[bold]━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[/]\n")
         logger.info("[green]Workflow completed successfully | Status: [bold]SUCCESS[/][/]")
-        
+
     except Exception as e:
         logger.error("Workflow failed: %s", str(e), exc_info=True)
         raise

@@ -153,7 +153,7 @@ class FactCheckNode:
             if speaker == SPEAKER_PRO:
                 return {
                     "messages": messages + [fact_checker_msg],
-                    "validated": False,
+                    "validated": False, 
                     "times_pro_fact_checked": state.get("times_pro_fact_checked", 0) + 1,
                 }
             elif speaker == SPEAKER_CON:
